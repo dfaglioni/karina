@@ -2,7 +2,8 @@ package br.com.elotech.karina.domain;
 
 public enum Situacao {
 
-    ATIVO("A"), INATIVO("I");
+    ATIVO("A"),
+    INATIVO("I");
 
     private final String sigla;
 

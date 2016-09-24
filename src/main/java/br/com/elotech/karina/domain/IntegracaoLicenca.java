@@ -12,6 +12,7 @@ public class IntegracaoLicenca {
      */
     private Integer codigoEmpresa;
     private Integer codigoFilial;
+
     private Integer horaGeracaoRepositorio;
 
     private Integer numeroInternoContrato;

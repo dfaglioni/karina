@@ -2,7 +2,8 @@ package br.com.elotech.karina.domain;
 
 public enum TipoGeracao {
 
-    MANUAL("M"), AUTOMATICA("A");
+    MANUAL("M"),
+    AUTOMATICA("A");
 
     private final String sigla;
 
