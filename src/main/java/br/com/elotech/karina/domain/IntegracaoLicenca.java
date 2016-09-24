@@ -23,9 +23,6 @@ public class IntegracaoLicenca {
     @EmbeddedId
     private IntegracaoLicencaPk id;
 
-    /**
-     * Campos não utilizados
-     */
     @Column(name = "usu_horger")
     private Integer horaGeracaoRepositorio;
 
