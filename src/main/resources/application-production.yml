@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:jtds:sqlserver://srvFinanceiro/prototipojs
+    username: prototipojs
+    password: prototipojs
+    driverClassName: net.sourceforge.jtds.jdbc.Driver
+
