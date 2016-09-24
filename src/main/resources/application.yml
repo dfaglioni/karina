@@ -4,3 +4,11 @@ spring:
     username: prototipojs
     password: prototipojs
     driverClassName: net.sourceforge.jtds.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+liquibase:
+  contexts: dev
+  change-log: classpath:db/changelog/master.xml
