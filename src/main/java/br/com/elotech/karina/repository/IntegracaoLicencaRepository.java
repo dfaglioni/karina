@@ -1,12 +1,9 @@
 package br.com.elotech.karina.repository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.elotech.karina.domain.IntegracaoLicenca;
+import br.com.elotech.karina.domain.IntegracaoLicencaPk;
 
-public interface IntegracaoLicencaRepository {
-
-    List<IntegracaoLicenca> findNaoProcessados();
-
-    void marcaTodosProcessados();
+public interface IntegracaoLicencaRepository extends JpaRepository<IntegracaoLicenca, IntegracaoLicencaPk> {
 }

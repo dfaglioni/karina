@@ -4,3 +4,7 @@ spring:
     username: prototipojs
     password: prototipojs
     driverClassName: net.sourceforge.jtds.jdbc.Driver
+
+liquibase:
+  contexts: dev
+  change-log: classpath:db/changelog/master.xml

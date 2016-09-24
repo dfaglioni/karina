@@ -2,20 +2,32 @@ package br.com.elotech.karina.domain;
 
 import java.time.LocalDate;
 
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Entity
+@Table(name = "usu_t160itg")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class IntegracaoLicenca {
+
+    @EmbeddedId
+    private IntegracaoLicencaPk id;
 
     /**
      * Campos não utilizados
      */
-    private Integer codigoEmpresa;
-    private Integer codigoFilial;
     private Integer horaGeracaoRepositorio;
 
     private Integer numeroInternoContrato;
-    private Integer sequenciaIntegracao;
 
     private Integer sequenciaItemServico;
     private Integer codigoClienteContrato;
