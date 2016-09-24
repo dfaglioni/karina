@@ -6,7 +6,6 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import br.com.elotech.karina.domain.IntegracaoLicencaPk.IntegracaoLicencaPkBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
