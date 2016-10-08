@@ -1,12 +1,13 @@
 package br.com.elotech.karina.service;
 
-import java.util.List;
+import java.util.*;
 
-import br.com.elotech.karina.domain.IntegracaoLicenca;
-import br.com.elotech.karina.domain.License;
+import br.com.elotech.karina.domain.*;
 
 public interface LicenseService {
 
     List<License> processar(List<IntegracaoLicenca> integracaoLicenca);
+
+    License getLicenseFrom(IntegracaoLicenca integracaoLicenca);
 
 }

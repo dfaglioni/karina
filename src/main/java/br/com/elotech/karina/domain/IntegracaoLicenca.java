@@ -1,16 +1,10 @@
 package br.com.elotech.karina.domain;
 
-import java.time.LocalDate;
+import java.time.*;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Entity
@@ -91,4 +85,48 @@ public class IntegracaoLicenca {
 
     @Column(name = "usu_tipaca")
     private TipoAcao tipoAcao;
+
+    @Column(name = "usu_processado")
+    private boolean processado = false;
+
+    public IntegracaoLicenca withCodigoClienteContrato(Integer codigoClienteContrato) {
+        this.codigoClienteContrato = codigoClienteContrato;
+        return this;
+    }
+
+    public IntegracaoLicenca withNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
+        return this;
+    }
+
+    public IntegracaoLicenca withCodigoServico(String codigoServico) {
+        this.codigoServico = codigoServico;
+        return this;
+    }
+
+    public IntegracaoLicenca withEmissaoTitulo(LocalDate emissaoTitulo) {
+        this.emissaoTitulo = emissaoTitulo;
+        return this;
+    }
+
+    public IntegracaoLicenca withVencimentoTitulo(LocalDate vencimentoTitulo) {
+        this.vencimentoTitulo = vencimentoTitulo;
+        return this;
+    }
+
+    public IntegracaoLicenca withQuitacaoTitulo(LocalDate quitacaoTitulo) {
+        this.quitacaoTitulo = quitacaoTitulo;
+        return this;
+    }
+
+    public IntegracaoLicenca withTipoRegistro(TipoRegistro tipoRegistro) {
+        this.tipoRegistro = tipoRegistro;
+        return this;
+    }
+
+    public IntegracaoLicenca withProcessado(boolean processado) {
+        this.processado = processado;
+        return this;
+    }
+
 }

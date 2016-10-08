@@ -86,6 +86,10 @@
 			
 			<column name="usu_tipaca" type="smallint">
 			</column>
+			
+			<column name="usu_processado" type="smallint" defaultValue="0">
+			</column>
+			
 		</createTable>
 	</changeSet>
 </databaseChangeLog>

@@ -2,41 +2,35 @@ package br.com.elotech.karina.service.impl;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.*;
 
-import java.util.List;
+import java.time.*;
+import java.util.*;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.*;
+import org.mockito.*;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.*;
 
-import br.com.elotech.karina.domain.IntegracaoLicenca;
-import br.com.elotech.karina.domain.License;
-import br.com.elotech.karina.service.GeradorSenha;
-import br.com.elotech.karina.service.LicenseService;
+import br.com.elotech.karina.domain.*;
+import br.com.elotech.karina.service.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class LicenseServiceImplTest {
 
-    @Autowired
-    private LicenseService licenseService;
+    private GeradorSenha geradorSenha = mock(GeradorSenha.class);
 
-    @MockBean
-    private GeradorSenha geradorSenha;
+    private LicenseService licenseService = new LicenseServiceImpl(geradorSenha);
+
+    @Before
+    public void setUp() {
+
+        when(geradorSenha.generate(Matchers.any(License.class))).thenReturn("fake");
+    }
 
     @Test
     public void deveChamarGeradorSenha() {
-        given(geradorSenha.generate(Matchers.any(License.class))).willReturn("SENHA");
 
-        IntegracaoLicenca integracaoLicenca = new IntegracaoLicenca();
+        IntegracaoLicenca integracaoLicenca = new IntegracaoLicenca().withTipoRegistro(TipoRegistro.LIBERA);
 
         List<License> licenses = licenseService.processar(Lists.newArrayList(integracaoLicenca));
 
@@ -44,6 +38,59 @@ public class LicenseServiceImplTest {
         assertThat(licenses, hasSize(1));
 
         Mockito.verify(geradorSenha).generate(Matchers.any(License.class));
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void integracaoLicencaProcessa() {
+
+        IntegracaoLicenca integracaoLicenca = new IntegracaoLicenca().withTipoRegistro(TipoRegistro.LIBERA)
+                .withProcessado(true);
+
+        licenseService.getLicenseFrom(integracaoLicenca);
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void integracaoLicencaNaoLiberada() {
+
+        IntegracaoLicenca integracaoLicenca = new IntegracaoLicenca().withTipoRegistro(TipoRegistro.BLOQUEIO);
+
+        licenseService.getLicenseFrom(integracaoLicenca);
+
+    }
+
+    @Test
+    public void tituloQuitado() {
+
+        IntegracaoLicenca integracaoLicenca = new IntegracaoLicenca().withCodigoClienteContrato(297001)
+                .withCodigoServico("003").withEmissaoTitulo(LocalDate.of(2016, 10, 6))
+                .withVencimentoTitulo(LocalDate.of(2016, 11, 5)).withNomeCliente("PREFEITURA MUNICIPAL DE UMUARAMA")
+                .withTipoRegistro(TipoRegistro.LIBERA).withQuitacaoTitulo(LocalDate.of(2016, 11, 7));
+
+        License licenseExpect = new License(297001, "003297001", Module.CONTABIL, LocalDate.of(2016, 12, 7),
+                "PREFEITURA MUNICIPAL DE UMUARAMA", "fake");
+
+        License license = licenseService.getLicenseFrom(integracaoLicenca);
+
+        assertThat(license, samePropertyValuesAs(licenseExpect));
+
+    }
+
+    @Test
+    public void tituloNaoVencido() {
+
+        IntegracaoLicenca integracaoLicenca = new IntegracaoLicenca().withCodigoClienteContrato(297001)
+                .withCodigoServico("003").withEmissaoTitulo(LocalDate.of(2016, 10, 6))
+                .withVencimentoTitulo(LocalDate.of(2016, 11, 5)).withNomeCliente("PREFEITURA MUNICIPAL DE UMUARAMA")
+                .withTipoRegistro(TipoRegistro.LIBERA);
+
+        License licenseExpect = new License(297001, "003297001", Module.CONTABIL, LocalDate.of(2016, 11, 10),
+                "PREFEITURA MUNICIPAL DE UMUARAMA", "fake");
+
+        License license = licenseService.getLicenseFrom(integracaoLicenca);
+
+        assertThat(license, samePropertyValuesAs(licenseExpect));
 
     }
 
