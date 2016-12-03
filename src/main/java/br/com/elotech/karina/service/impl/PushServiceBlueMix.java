@@ -1,5 +1,6 @@
 package br.com.elotech.karina.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -45,7 +46,11 @@ public class PushServiceBlueMix implements PushService {
 
         LOGGER.debug("Preparing push to license server: {}", licenses);
 
-        final List<?> result = this.restTemplate.postForObject(this.licenseUrl + "/licenses", licenses, List.class);
+        final List<License> result = new ArrayList<>();
+
+        licenses.forEach(l -> {
+            result.add(this.restTemplate.postForObject(this.licenseUrl + "/licenses", l, License.class));
+        });
 
         LOGGER.info("Result from POST: {}", result);
     }

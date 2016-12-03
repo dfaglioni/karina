@@ -5,3 +5,5 @@ spring:
     password: prototipojs
     driverClassName: net.sourceforge.jtds.jdbc.Driver
 
+karina:
+  licenseServerUrl: http://license.elotech.com.br/

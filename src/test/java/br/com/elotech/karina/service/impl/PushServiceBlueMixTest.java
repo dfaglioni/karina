@@ -1,5 +1,6 @@
 package br.com.elotech.karina.service.impl;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -63,6 +64,7 @@ public class PushServiceBlueMixTest {
     @Test
     public void testPushFromPopulatedCollection() {
 
+        final String string = SERVER_URL + "/licenses";
         final List<License> licenses = createLicenseList();
 
         when(this.licenseServiceMock.processar()).thenReturn(licenses);
@@ -70,13 +72,14 @@ public class PushServiceBlueMixTest {
         this.service.push();
 
         verify(this.licenseServiceMock).processar();
-        verify(this.restTemplateMock).postForObject(SERVER_URL + "/licenses", licenses, List.class);
+        verify(this.restTemplateMock, times(licenses.size())).postForObject(Mockito.eq(string), Mockito.any(),
+                Mockito.eq(License.class));
 
     }
 
     private List<License> createLicenseList() {
 
-        License license1 = License.builder()
+        final License license1 = License.builder()
                 .cliente(1)
                 .code("licenseCode1")
                 .date(LocalDate.now())
@@ -84,7 +87,7 @@ public class PushServiceBlueMixTest {
                 .name("licenseName1")
                 .build();
 
-        License license2 = License.builder()
+        final License license2 = License.builder()
                 .cliente(1)
                 .code("licenseCode2")
                 .date(LocalDate.now())
