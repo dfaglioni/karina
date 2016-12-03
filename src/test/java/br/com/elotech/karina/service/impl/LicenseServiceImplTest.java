@@ -1,25 +1,42 @@
 package br.com.elotech.karina.service.impl;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import java.time.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.List;
 
-import org.junit.*;
-import org.mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Matchers;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import com.google.common.collect.*;
+import com.google.common.collect.Lists;
 
-import br.com.elotech.karina.domain.*;
-import br.com.elotech.karina.service.*;
+import br.com.elotech.karina.domain.IntegracaoLicenca;
+import br.com.elotech.karina.domain.License;
+import br.com.elotech.karina.domain.Module;
+import br.com.elotech.karina.domain.TipoRegistro;
+import br.com.elotech.karina.repository.IntegracaoLicencaRepository;
+import br.com.elotech.karina.service.GeradorSenha;
+import br.com.elotech.karina.service.LicenseService;
 
+@RunWith(MockitoJUnitRunner.class)
 public class LicenseServiceImplTest {
 
     private GeradorSenha geradorSenha = mock(GeradorSenha.class);
 
-    private LicenseService licenseService = new LicenseServiceImpl(geradorSenha);
+    @Mock
+    private IntegracaoLicencaRepository integracaoLicensaRepositoryMock;
+
+    private LicenseService licenseService = new LicenseServiceImpl(geradorSenha, integracaoLicensaRepositoryMock);
 
     @Before
     public void setUp() {
@@ -32,7 +49,9 @@ public class LicenseServiceImplTest {
 
         IntegracaoLicenca integracaoLicenca = new IntegracaoLicenca().withTipoRegistro(TipoRegistro.LIBERA);
 
-        List<License> licenses = licenseService.processar(Lists.newArrayList(integracaoLicenca));
+        when(integracaoLicensaRepositoryMock.findAll()).thenReturn(Lists.newArrayList(integracaoLicenca));
+
+        List<License> licenses = licenseService.processar();
 
         assertThat(licenses, notNullValue());
         assertThat(licenses, hasSize(1));

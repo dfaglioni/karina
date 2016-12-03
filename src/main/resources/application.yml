@@ -1,7 +1,15 @@
 spring:
+  application:
+    name: karina
   jpa:
     hibernate:
       ddl-auto: none
 
+server:
+  port: 8080
+
 liquibase:
   change-log: classpath:db/changelog/master.xml
+
+karina:
+  licenseServerUrl: http://license.elotech.com.br/

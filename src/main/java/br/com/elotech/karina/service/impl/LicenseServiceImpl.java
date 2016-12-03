@@ -1,13 +1,18 @@
 package br.com.elotech.karina.service.impl;
 
-import java.time.*;
-import java.util.*;
-import java.util.stream.*;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.stereotype.*;
+import org.springframework.stereotype.Service;
 
-import br.com.elotech.karina.domain.*;
-import br.com.elotech.karina.service.*;
+import br.com.elotech.karina.domain.IntegracaoLicenca;
+import br.com.elotech.karina.domain.License;
+import br.com.elotech.karina.domain.Module;
+import br.com.elotech.karina.domain.TipoRegistro;
+import br.com.elotech.karina.repository.IntegracaoLicencaRepository;
+import br.com.elotech.karina.service.GeradorSenha;
+import br.com.elotech.karina.service.LicenseService;
 
 @Service
 public class LicenseServiceImpl implements LicenseService {
@@ -15,14 +20,18 @@ public class LicenseServiceImpl implements LicenseService {
     private static final long VENCIMENTO_CARENCIA = 5;
 
     private final GeradorSenha geradorSenha;
+    private final IntegracaoLicencaRepository integracaoRepository;
 
-    public LicenseServiceImpl(GeradorSenha geradorSenha) {
+    public LicenseServiceImpl(GeradorSenha geradorSenha, IntegracaoLicencaRepository integracaoRepository) {
         this.geradorSenha = geradorSenha;
+        this.integracaoRepository = integracaoRepository;
     }
 
     @Override
-    public List<License> processar(List<IntegracaoLicenca> integracaoLicenca) {
-        return integracaoLicenca.stream()
+    public List<License> processar() {
+
+        return this.integracaoRepository.findAll()
+                .stream()
                 .map(this::getLicenseFrom)
                 .collect(Collectors.toList());
     }
