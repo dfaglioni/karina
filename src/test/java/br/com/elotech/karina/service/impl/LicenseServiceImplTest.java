@@ -36,10 +36,12 @@ public class LicenseServiceImplTest {
     @Mock
     private IntegracaoLicencaRepository integracaoLicensaRepositoryMock;
 
-    private LicenseService licenseService = new LicenseServiceImpl(geradorSenha, integracaoLicensaRepositoryMock);
+    private LicenseService licenseService;
 
     @Before
     public void setUp() {
+
+        this.licenseService = new LicenseServiceImpl(geradorSenha, integracaoLicensaRepositoryMock);
 
         when(geradorSenha.generate(Matchers.any(License.class))).thenReturn("fake");
     }
