@@ -1,6 +1,7 @@
 package br.com.elotech.karina.service.impl;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bouncycastle.crypto.BufferedBlockCipher;
@@ -32,29 +33,32 @@ public class GeradorSenhaElotech implements GeradorSenha {
     @SneakyThrows
     private String internalGenerate(String concatLicense) {
 
-        byte[] key = DigestUtils.getSha1Digest().digest(DigestUtils.md5Hex(KEY_ELOTECH).getBytes());
+        System.out.println(concatLicense);
 
-        KeyParameter keyParameter = new KeyParameter(key);
-        BufferedBlockCipher cipher = new BufferedBlockCipher(new IDEAEngine());
-        cipher.init(true, keyParameter);
+        String keyForSha1 = DigestUtils.md5Hex(KEY_ELOTECH).toUpperCase();
+        System.out.println(keyForSha1);
+
+        String keyForIdea = new String(Hex.encode(DigestUtils.getSha1Digest().digest(keyForSha1.getBytes())))
+                .toUpperCase();
+
+        System.out.println(keyForIdea);
 
         byte[] input = concatLicense.getBytes();
-
         byte[] out = new byte[input.length];
+
+        KeyParameter keyParameter = new KeyParameter(keyForIdea.getBytes());
+
+        BufferedBlockCipher cipher = new BufferedBlockCipher(new IDEAEngine());
+
+        cipher.init(true, keyParameter);
 
         cipher.processBytes(input, 0, input.length, out, 0);
 
-        String ideaSecret = new String(Hex.encode(out)).toUpperCase();
-        StringBuilder licenseKey = new StringBuilder();
+        String ideaSecret = Base64.getEncoder().encodeToString(out);
 
-        for (int i = 0; i < ideaSecret.length(); i++) {
+        System.out.println(ideaSecret);
 
-            if (i % 9 == 0) {
-                licenseKey.append(ideaSecret.charAt(i));
-            }
-        }
-
-        return licenseKey.toString();
+        return null;
 
     }
 
